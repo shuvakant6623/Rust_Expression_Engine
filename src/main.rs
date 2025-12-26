@@ -1,15 +1,21 @@
-mod token;
-mod stack;
-mod precedence;
+// Declare top-level modules
 
-use token :: Token;
-use stack :: Stack;
+mod lexer;
+
+// Bring tokenizer into scope
+use lexer::tokenizer::Tokenizer;
 
 fn main() {
-    let mut stack = Stack :: <Token> :: new(100);
+    // Test input expression
+    let input = "(a + b) * 3";
 
-    stack.push(Token::Number(3));
-    stack.push(Token::Operator('+'));
+    // Run tokenizer (lexical analysis)
+    let tokens = Tokenizer::tokenize(input);
 
-    println!("{:?}", stack.peek());
+    // Print tokens to verify correctness
+    println!("Input Expression: {}", input);
+    println!("Tokens:");
+    for token in tokens {
+        println!("{:?}", token);
+    }
 }
