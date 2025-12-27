@@ -1,21 +1,18 @@
-// Declare top-level modules
-
+mod core;
 mod lexer;
+mod parser;
 
-// Bring tokenizer into scope
 use lexer::tokenizer::Tokenizer;
+use parser::infix_to_postfix::Parser;
 
 fn main() {
-    // Test input expression
     let input = "(a + b) * 3";
 
-    // Run tokenizer (lexical analysis)
     let tokens = Tokenizer::tokenize(input);
+    let postfix = Parser::infix_to_postfix(tokens);
 
-    // Print tokens to verify correctness
-    println!("Input Expression: {}", input);
-    println!("Tokens:");
-    for token in tokens {
+    println!("Postfix Expression:");
+    for token in postfix {
         println!("{:?}", token);
     }
 }
