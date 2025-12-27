@@ -12,12 +12,10 @@ impl Parser {
         for token in tokens {
             match token {
                 Token::Number(_) | Token::Variable(_) => {
-                    // Operands go directly to output
                     output.push(token);
                 }
 
                 Token::Operator(op) => {
-                    // Pop operators with higher or equal precedence
                     while let Ok(top) = stack.peek() {
                         if let Token::Operator(top_op) = top {
                             if precedence(*top_op) >= precedence(op) {
@@ -37,7 +35,6 @@ impl Parser {
                 }
 
                 Token::RParen => {
-                    // Pop until matching '('
                     while let Ok(top) = stack.pop() {
                         if top == Token::LParen {
                             break;
@@ -48,7 +45,6 @@ impl Parser {
             }
         }
 
-        // Pop remaining operators
         while let Ok(op) = stack.pop() {
             output.push(op);
         }
