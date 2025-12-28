@@ -1,71 +1,63 @@
 use crate::core::token::Token;
+use crate::errors::error::ExpressionError;
 
 pub struct Tokenizer;
 
 impl Tokenizer {
-    pub fn tokenize(input: &str) -> Vec<Token> {
-        let mut tokens = Vec::new();
-        let mut chars = input.chars().peekable();
+    pub fn tokenize(input: &str) -> Result<Vec<Token>, ExpressionError> {
+        if input.trim().is_empty() {
+            return Err(ExpressionError::Lexer {
+                message: "Empty expression".into(),
+                position: 0,
+            });
+        }
 
-        while let Some(&ch) = chars.peek() {
+        let mut tokens = Vec::new();
+        let mut chars = input.chars().enumerate().peekable();
+
+        while let Some((idx, ch)) = chars.peek().cloned() {
             match ch {
                 '0'..='9' => {
-                    tokens.push(Self::read_number(&mut chars));
+                    let mut num = 0;
+                    while let Some((_, c)) = chars.peek() {
+                        if c.is_ascii_digit() {
+                            num = num * 10 + (*c as i32 - '0' as i32);
+                            chars.next();
+                        } else { break; }
+                    }
+                    tokens.push(Token::Number(num));
                 }
+
                 'a'..='z' | 'A'..='Z' => {
-                    tokens.push(Self::read_variable(&mut chars));
+                    let mut name = String::new();
+                    while let Some((_, c)) = chars.peek() {
+                        if c.is_alphanumeric() || *c == '_' {
+                            name.push(*c);
+                            chars.next();
+                        } else { break; }
+                    }
+                    tokens.push(Token::Variable(name));
                 }
+
                 '+' | '-' | '*' | '/' | '^' => {
                     chars.next();
                     tokens.push(Token::Operator(ch));
                 }
-                '(' => {
-                    chars.next();
-                    tokens.push(Token::LParen);
-                }
-                ')' => {
-                    chars.next();
-                    tokens.push(Token::RParen);
-                }
-                ' ' | '\t' | '\n' => {
-                    chars.next(); // ignore whitespace
-                }
+
+                '(' => { chars.next(); tokens.push(Token::LParen); }
+                ')' => { chars.next(); tokens.push(Token::RParen); }
+
+                ' ' | '\t' | '\n' => { chars.next(); }
+
                 _ => {
-                    panic!("Unexpected character: {}", ch);
+                    return Err(ExpressionError::Lexer {
+                        message: format!("Invalid character '{}'", ch),
+                        position: idx,
+                    });
                 }
             }
         }
 
-        tokens
-    }
-
-    fn read_number(chars: &mut std::iter::Peekable<std::str::Chars>) -> Token {
-        let mut num = 0;
-
-        while let Some(&ch) = chars.peek() {
-            if ch.is_ascii_digit() {
-                num = num * 10 + (ch as i32 - '0' as i32);
-                chars.next();
-            } else {
-                break;
-            }
-        }
-
-        Token::Number(num)
-    }
-
-    fn read_variable(chars: &mut std::iter::Peekable<std::str::Chars>) -> Token {
-        let mut name = String::new();
-
-        while let Some(&ch) = chars.peek() {
-            if ch.is_alphanumeric() || ch == '_' {
-                name.push(ch);
-                chars.next();
-            } else {
-                break;
-            }
-        }
-
-        Token::Variable(name)
+        Ok(tokens)
     }
 }

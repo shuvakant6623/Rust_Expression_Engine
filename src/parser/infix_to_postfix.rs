@@ -1,13 +1,14 @@
-use crate::core::precedence::precedence;
-use crate::core::stack::Stack;
-use crate::core::token::Token;
+use crate::core::{stack::Stack, token::Token, precedence::precedence};
+use crate::errors::error::ExpressionError;
 
 pub struct Parser;
 
 impl Parser {
-    pub fn infix_to_postfix(tokens: Vec<Token>) -> Vec<Token> {
-        let mut output: Vec<Token> = Vec::new();
-        let mut stack: Stack<Token> = Stack::new(100);
+    pub fn infix_to_postfix(tokens: Vec<Token>)
+        -> Result<Vec<Token>, ExpressionError>
+    {
+        let mut output = Vec::new();
+        let mut stack = Stack::with_capacity(tokens.len());
 
         for token in tokens {
             match token {
@@ -16,39 +17,43 @@ impl Parser {
                 }
 
                 Token::Operator(op) => {
-                    while let Ok(top) = stack.peek() {
-                        if let Token::Operator(top_op) = top {
-                            if precedence(*top_op) >= precedence(op) {
-                                output.push(stack.pop().unwrap());
-                            } else {
-                                break;
-                            }
-                        } else {
-                            break;
-                        }
+                    while let Some(Token::Operator(top)) = stack.peek() {
+                        if precedence(*top) >= precedence(op) {
+                            output.push(stack.pop().unwrap());
+                        } else { break; }
                     }
                     stack.push(Token::Operator(op));
                 }
 
-                Token::LParen => {
-                    stack.push(Token::LParen);
-                }
+                Token::LParen => stack.push(Token::LParen),
 
                 Token::RParen => {
-                    while let Ok(top) = stack.pop() {
-                        if top == Token::LParen {
+                    let mut matched = false;
+                    while let Some(t) = stack.pop() {
+                        if t == Token::LParen {
+                            matched = true;
                             break;
                         }
-                        output.push(top);
+                        output.push(t);
+                    }
+                    if !matched {
+                        return Err(ExpressionError::Parser {
+                            message: "Unmatched ')'".into(),
+                        });
                     }
                 }
             }
         }
 
-        while let Ok(op) = stack.pop() {
-            output.push(op);
+        while let Some(t) = stack.pop() {
+            if t == Token::LParen {
+                return Err(ExpressionError::Parser {
+                    message: "Unmatched '('".into(),
+                });
+            }
+            output.push(t);
         }
 
-        output
+        Ok(output)
     }
 }

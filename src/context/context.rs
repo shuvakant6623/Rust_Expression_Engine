@@ -1,24 +1,25 @@
 use std::collections::HashMap;
+use crate::errors::error::ExpressionError;
 
 #[derive(Debug)]
 pub struct Context {
-    variables: HashMap<String, i32>,
+    vars: HashMap<String, i32>,
 }
 
 impl Context {
     pub fn new() -> Self {
-        Context {
-            variables: HashMap::new(),
-        }
+        Self { vars: HashMap::new() }
     }
 
-    pub fn set(&mut self, name: &str, value: i32) {
-        self.variables.insert(name.to_string(), value);
+    pub fn set(&mut self, k: &str, v: i32) {
+        self.vars.insert(k.to_string(), v);
     }
 
-    pub fn get(&self, name: &str) -> i32 {
-        *self.variables
-            .get(name)
-            .expect("Undefined variable")
+    pub fn get(&self, k: &str) -> Result<i32, ExpressionError> {
+        self.vars.get(k).copied().ok_or(
+            ExpressionError::Evaluation {
+                message: format!("Undefined variable '{}'", k),
+            }
+        )
     }
 }

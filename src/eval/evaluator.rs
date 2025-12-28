@@ -1,44 +1,57 @@
-use crate::context::context::Context;
-use crate::core::stack::Stack;
-use crate::core::token::Token;
+use crate::{
+    core::{stack::Stack, token::Token},
+    context::context::Context,
+    errors::error::ExpressionError,
+};
 
 pub struct Evaluator;
 
 impl Evaluator {
-    pub fn evaluate(postfix: Vec<Token>, ctx: &Context) -> i32 {
-        let mut stack: Stack<i32> = Stack::new(200);
+    pub fn evaluate(postfix: &[Token], ctx: &Context)
+        -> Result<i32, ExpressionError>
+    {
+        let mut stack = Stack::with_capacity(postfix.len());
 
         for token in postfix {
             match token {
-                Token::Number(n) => {
-                    stack.push(n);
-                }
+                Token::Number(n) => stack.push(*n),
 
                 Token::Variable(name) => {
-                    let value = ctx.get(&name);
-                    stack.push(value);
+                    let v = ctx.get(name)?;
+                    stack.push(v);
                 }
 
                 Token::Operator(op) => {
-                    let right = stack.pop().expect("Missing operand");
-                    let left = stack.pop().expect("Missing operand");
+                    let r = stack.pop().ok_or(
+                        ExpressionError::Evaluation { message: "Missing operand".into() })?;
+                    let l = stack.pop().ok_or(
+                        ExpressionError::Evaluation { message: "Missing operand".into() })?;
 
-                    let result = match op {
-                        '+' => left + right,
-                        '-' => left - right,
-                        '*' => left * right,
-                        '/' => left / right,
-                        '^' => left.pow(right as u32),
-                        _ => panic!("Unknown operator"),
+                    let res = match op {
+                        '+' => l + r,
+                        '-' => l - r,
+                        '*' => l * r,
+                        '/' => {
+                            if r == 0 {
+                                return Err(ExpressionError::Evaluation {
+                                    message: "Division by zero".into(),
+                                });
+                            }
+                            l / r
+                        }
+                        '^' => l.pow(r as u32),
+                        _ => unreachable!(),
                     };
 
-                    stack.push(result);
+                    stack.push(res);
                 }
 
-                _ => panic!("Invalid token in evaluation"),
+                _ => {}
             }
         }
 
-        stack.pop().expect("Invalid expression")
+        stack.pop().ok_or(ExpressionError::Evaluation {
+            message: "Invalid expression".into(),
+        })
     }
 }
