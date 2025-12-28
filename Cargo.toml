@@ -1,0 +1,13 @@
+[package]
+name = "expression_engine"
+version = "0.1.0"
+edition = "2021"
+authors = ["Shuvakant Patra"]
+description = "A compiler-inspired mathematical expression engine written from scratch in Rust"
+license = "MIT"
+repository = "https://github.com/shuvakant6623/Rust_Expression_Engine"
+readme = "README.md"
+keywords = ["compiler", "parser", "interpreter", "expression-engine", "rust"]
+categories = ["compilers", "command-line-utilities"]
+
+[dependencies]
