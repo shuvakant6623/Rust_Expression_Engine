@@ -55,8 +55,8 @@ Result: 45
 ---
 
 ## 🏗️ Architecture Overview
-
-Raw Expression (text)
+```bash
+Raw Expression (text) 
 ↓
 Lexical Analysis (Tokenizer)
 ↓
@@ -66,7 +66,7 @@ Postfix IR (Explicit Execution Order)
 ↓
 Evaluation (Interpreter)
 
-
+```
 Each phase is **isolated and testable**.
 
 ---
