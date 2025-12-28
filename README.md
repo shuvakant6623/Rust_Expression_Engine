@@ -1,129 +1,123 @@
-🧠 Rust Expression Engine
+## 🧠 Rust Expression Engine
 
-A compiler-inspired expression engine implemented entirely from scratch in Rust, designed to parse, transform, and deterministically evaluate human-written mathematical expressions.
+A **compiler-inspired expression engine** written entirely from scratch in **Rust**.
 
-The project follows a real compiler pipeline (Lexer → Parser → IR → Evaluator) and focuses on systems design, execution semantics, and correctness, not shortcuts or library abstractions.
+This project parses, transforms, and deterministically evaluates **human-written mathematical expressions** by following a real **compiler pipeline** rather than executing raw strings.
 
-Status: Core compiler pipeline complete
-(Lexer → Parser → Postfix IR → Evaluator → CLI)
+---
 
-🎯 Motivation
+## 🎯 Motivation
 
-Modern systems such as compilers, query engines, and feature stores never execute raw strings directly.
+Modern systems (compilers, query engines, feature stores) never evaluate raw text directly.
 
 Instead, they:
 
-Tokenize input
-
-Resolve syntax and operator precedence
-
-Make execution order explicit
-
-Evaluate deterministically
+- Tokenize input
+- Resolve syntax and operator precedence
+- Make execution order explicit
+- Evaluate deterministically
 
 This project recreates that pipeline from first principles to deeply understand:
 
-how interpreters are built
+- how interpreters are built  
+- how execution order is derived  
+- how systems separate parsing, semantics, and execution  
 
-how execution order is derived
+---
 
-how systems separate parsing, semantics, and execution
+## ✨ Features
 
-✨ Features
+- Custom **Lexer** (iterator-based, from scratch)
+- **Shunting Yard Parser** (infix → postfix)
+- Explicit **Postfix Intermediate Representation (IR)**
+- Stack-based **Evaluator / Interpreter**
+- Variable assignments via **symbol table**
+- Interactive **CLI**
+- Clean, compiler-style modular architecture
+- No `eval`, no parsing libraries, no shortcuts
 
-Custom Lexer (iterator-based, from scratch)
+---
 
-Shunting Yard Parser (infix → postfix)
+## 🧩 Example
 
-Explicit Postfix Intermediate Representation (IR)
+### Input
 
-Stack-based Evaluator / Interpreter
-
-Variable assignments via symbol table
-
-Interactive CLI
-
-Clean, compiler-style modular architecture
-
-No eval, no parsing libraries, no shortcuts
-
-🧩 Example
-Input
 a = 10
 b = 5
 (a + b) * 3
 
-Output
+
+### Output
+
 Result: 45
 
-🏗️ Architecture Overview
+
+---
+
+## 🏗️ Architecture Overview
+
 Raw Expression (text)
-        ↓
+↓
 Lexical Analysis (Tokenizer)
-        ↓
+↓
 Syntax Analysis (Parser)
-        ↓
+↓
 Postfix IR (Explicit Execution Order)
-        ↓
+↓
 Evaluation (Interpreter)
 
 
-Each phase is:
+Each phase is **isolated and testable**.
 
-isolated
+---
 
-testable
+## 📂 Project Structure
 
-replaceable
-
-This mirrors real compiler and query-engine pipelines.
-
-📂 Project Structure
 expression_engine/
 │
 ├── Cargo.toml
 ├── README.md
 │
 └── src/
-    ├── main.rs              # CLI driver
-    │
-    ├── core/                # Language primitives
-    │   ├── token.rs
-    │   ├── stack.rs
-    │   └── precedence.rs
-    │
-    ├── lexer/               # Lexical analysis
-    │   └── tokenizer.rs
-    │
-    ├── parser/              # Syntax analysis
-    │   └── infix_to_postfix.rs
-    │
-    ├── context/             # Symbol table
-    │   └── context.rs
-    │
-    └── eval/                # Execution engine
-        └── evaluator.rs
+├── main.rs # CLI driver
+│
+├── core/ # Language primitives
+│ ├── token.rs
+│ ├── stack.rs
+│ └── precedence.rs
+│
+├── lexer/ # Lexical analysis
+│ └── tokenizer.rs
+│
+├── parser/ # Syntax analysis
+│ └── infix_to_postfix.rs
+│
+├── context/ # Symbol table
+│ └── context.rs
+│
+└── eval/ # Execution engine
+└── evaluator.rs
 
 
-The structure intentionally mirrors production compiler layouts.
+This structure mirrors **real compiler pipelines**.
 
-🧠 Key Concepts Demonstrated
+---
 
-Language modeling using Rust enums
+## 🧠 Key Concepts Demonstrated
 
-Generic data structures (Stack<T>)
+- Enums for language modeling
+- Generic data structures (`Stack<T>`)
+- Ownership & borrowing for memory safety
+- Iterator-based lexical analysis
+- Stack-based parsing and execution
+- Deterministic execution model
+- Clear separation of compiler phases
 
-Ownership & borrowing for memory safety
+---
 
-Iterator-based lexical analysis
+## 🛠️ How to Run
 
-Stack-based parsing and execution
-
-Deterministic execution model
-
-Clear separation of compiler phases
-
-🛠️ How to Run
+```bash
 cargo run
 
 CLI Commands
@@ -132,52 +126,51 @@ Variable assignment
 
 x = 10
 
-
 Expression evaluation
 
 (x + 5) * 2
-
 
 Exit
 
 exit
 
-🚧 Current Limitations (Intentional)
+---
 
-Integer-only arithmetic
+## 🚧 Current Limitations (Intentional)
 
-No floating-point support
+    Integer-only arithmetic
 
-No functions yet (sin, log, etc.)
+    No floating-point support
 
-No AST or symbolic calculus
+    No functions yet (sin, log, etc.)
 
-Minimal error handling
+    No AST or symbolic calculus
 
-These are deliberate design boundaries, not gaps in understanding.
+    Minimal error handling
 
+These are deliberate design decisions, not missing understanding.
 🔮 Planned Extensions
 
-Abstract Syntax Tree (AST)
+    Abstract Syntax Tree (AST)
 
-Symbolic differentiation (chain & product rule)
+    Symbolic differentiation (chain & product rule)
 
-Limited symbolic integration
+    Limited symbolic integration
 
-Expression simplification
+    Expression simplification
 
-Compiler-style optimizations
+    Compiler-style optimizations
 
-Test suite & benchmarks
+    Test suite & benchmarks
 
-📚 Learning Outcomes
+📚 Learning Outcome
 
-This project emphasizes systems thinking over math tricks.
+This project focuses on systems thinking, not math tricks.
 
 It demonstrates:
 
-how interpreters and compilers are structured
+    how interpreters and compilers are structured
 
-how execution order is derived from syntax
+    how execution order is derived from syntax
 
-how deterministic, safe execution engines are designed in Rust
+    how deterministic execution engines are designed in Rust
