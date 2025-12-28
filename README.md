@@ -73,6 +73,7 @@ Each phase is **isolated and testable**.
 
 ## 📂 Project Structure
 
+```bash
 expression_engine/
 │
 ├── Cargo.toml
@@ -82,36 +83,30 @@ expression_engine/
 ├── main.rs # CLI driver
 │
 ├── core/ # Language primitives
+│ ├── mod.rs
 │ ├── token.rs
 │ ├── stack.rs
 │ └── precedence.rs
 │
 ├── lexer/ # Lexical analysis
+│ ├── mod.rs
 │ └── tokenizer.rs
 │
 ├── parser/ # Syntax analysis
+│ ├── mod.rs
 │ └── infix_to_postfix.rs
 │
 ├── context/ # Symbol table
+│ ├── mod.rs
 │ └── context.rs
 │
 └── eval/ # Execution engine
-└── evaluator.rs
+│ ├── mod.rs
+│ └── evaluator.rs
 
+```
 
 This structure mirrors **real compiler pipelines**.
-
----
-
-## 🧠 Key Concepts Demonstrated
-
-- Enums for language modeling
-- Generic data structures (`Stack<T>`)
-- Ownership & borrowing for memory safety
-- Iterator-based lexical analysis
-- Stack-based parsing and execution
-- Deterministic execution model
-- Clear separation of compiler phases
 
 ---
 
@@ -134,43 +129,52 @@ Exit
 
 exit
 
+```
 ---
 
+## 🧠 Key Concepts Demonstrated
+
+- Enums for language modeling
+- Generic data structures (`Stack<T>`)
+- Ownership & borrowing for memory safety
+- Iterator-based lexical analysis
+- Stack-based parsing and execution
+- Deterministic execution model
+- Clear separation of compiler phases
+
+---
 ## 🚧 Current Limitations (Intentional)
 
-    Integer-only arithmetic
-
-    No floating-point support
-
-    No functions yet (sin, log, etc.)
-
-    No AST or symbolic calculus
-
-    Minimal error handling
+- Integer-only arithmetic
+- No floating-point support
+- No functions yet (sin, log, etc.)
+- No AST or symbolic calculus
+- Minimal error handling
 
 These are deliberate design decisions, not missing understanding.
-🔮 Planned Extensions
 
-    Abstract Syntax Tree (AST)
+---
+## 🔮 Planned Extensions
 
-    Symbolic differentiation (chain & product rule)
-
-    Limited symbolic integration
-
-    Expression simplification
-
-    Compiler-style optimizations
-
-    Test suite & benchmarks
-
-📚 Learning Outcome
+- Abstract Syntax Tree (AST)
+- Symbolic differentiation (chain & product rule)
+- Limited symbolic integration
+- Expression simplification
+- Compiler-style optimizations
+- Test suite & benchmarks
+  
+---
+## 📚 Learning Outcome
 
 This project focuses on systems thinking, not math tricks.
 
 It demonstrates:
 
-    how interpreters and compilers are structured
+- how interpreters and compilers are structured
+- how execution order is derived from syntax
+- how deterministic execution engines are designed in Rust
 
-    how execution order is derived from syntax
+---
 
-    how deterministic execution engines are designed in Rust
+
+
