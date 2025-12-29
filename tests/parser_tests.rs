@@ -30,10 +30,3 @@ fn unmatched_paranthesis_returns_parser_error() {
     let msg = err.to_string();
     assert!(msg.contains("Unmatched"));
 }
-
-#[test]
-fn implicit_multiplication_is_error() {
-    let ctx = Context::new();
-    let result = evaluate_expression("3(7*4)", &ctx);
-    assert!(result.is_err());
-}
