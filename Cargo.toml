@@ -11,3 +11,8 @@ keywords = ["compiler", "parser", "interpreter", "expression-engine", "rust"]
 categories = ["compilers", "command-line-utilities"]
 
 [dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "expression_bench"
+harness = false

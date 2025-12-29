@@ -1,25 +1,9 @@
-mod core;
-mod lexer;
-mod parser;
-mod context;
-mod eval;
-mod errors;
-
 use std::io::{self, Write};
 
-use context::context::Context;
-use lexer::tokenizer::Tokenizer;
-use parser::infix_to_postfix::Parser;
-use eval::evaluator::Evaluator;
-
-fn evaluate_expression(
-    input: &str,
-    ctx: &Context,
-) -> Result<i32, errors::error::ExpressionError> {
-    let tokens = Tokenizer::tokenize(input)?;
-    let postfix = Parser::infix_to_postfix(tokens)?;
-    Evaluator::evaluate(&postfix, ctx)
-}
+use expression_engine::{
+    engine::evaluate_expression,
+    context::context::Context,
+};
 
 fn main() {
     let ctx = Context::new();
