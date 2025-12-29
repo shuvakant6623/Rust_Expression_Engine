@@ -39,7 +39,13 @@ impl Evaluator {
                             }
                             l / r
                         }
-                        '^' => l.pow(r as u32),
+                        '^' => {
+                            l.checked_pow(r as u32).ok_or(
+                                ExpressionError::Evaluation {
+                                    message: "Integer overflow in exponentiation".into(),
+                                }
+                            )?
+                        }
                         _ => unreachable!(),
                     };
 

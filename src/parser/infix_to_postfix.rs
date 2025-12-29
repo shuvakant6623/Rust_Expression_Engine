@@ -18,9 +18,14 @@ impl Parser {
 
                 Token::Operator(op) => {
                     while let Some(Token::Operator(top)) = stack.peek() {
-                        if precedence(*top) >= precedence(op) {
+
+                        if precedence(*top) > precedence(op)
+                            || (precedence(*top) == precedence(op) && op != '^')
+                        {
                             output.push(stack.pop().unwrap());
-                        } else { break; }
+                        } else {
+                            break;
+                        }
                     }
                     stack.push(Token::Operator(op));
                 }
