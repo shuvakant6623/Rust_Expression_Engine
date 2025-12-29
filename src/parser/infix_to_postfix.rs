@@ -1,17 +1,23 @@
-use crate::core::{stack::Stack, token::Token, precedence::precedence};
+use crate::core::{
+    stack::Stack,
+    token::Token,
+    precedence::precedence,
+};
 use crate::errors::error::ExpressionError;
 
 pub struct Parser;
 
 impl Parser {
-    pub fn infix_to_postfix(tokens: Vec<Token>)
-        -> Result<Vec<Token>, ExpressionError>
-    {
-        let mut output = Vec::new();
-        let mut stack = Stack::with_capacity(tokens.len());
+    pub fn infix_to_postfix(
+        tokens: Vec<Token>,
+    ) -> Result<Vec<Token>, ExpressionError> {
+
+        let mut output: Vec<Token> = Vec::new();
+        let mut stack: Stack<Token> = Stack::with_capacity(tokens.len());
 
         for token in tokens {
             match token {
+
                 Token::Number(_) | Token::Variable(_) => {
                     output.push(token);
                 }
@@ -30,10 +36,13 @@ impl Parser {
                     stack.push(Token::Operator(op));
                 }
 
-                Token::LParen => stack.push(Token::LParen),
+                Token::LParen => {
+                    stack.push(Token::LParen);
+                }
 
                 Token::RParen => {
                     let mut matched = false;
+
                     while let Some(t) = stack.pop() {
                         if t == Token::LParen {
                             matched = true;
@@ -41,6 +50,7 @@ impl Parser {
                         }
                         output.push(t);
                     }
+
                     if !matched {
                         return Err(ExpressionError::Parser {
                             message: "Unmatched ')'".into(),
