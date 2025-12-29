@@ -120,7 +120,7 @@ cargo bench
 Example result:
 ```bash
 evaluate (a+b)*3
-time: [316 ns 318 ns 321 ns]
+time: [335 ns 335 ns 336 ns]
 ```
 This includes tokenization, parsing, and evaluation.
 
