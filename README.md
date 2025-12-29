@@ -141,31 +141,31 @@ Type exit to quit.
 
 ## 🧠 What This Project Demonstrates
 
-    Understanding of compiler/interpreter pipelines
+- Understanding of compiler/interpreter pipelines
 
-    Strong grasp of Rust ownership, borrowing, and enums
+- Strong grasp of Rust ownership, borrowing, and enums
 
-    Idiomatic error handling with Result
+- Idiomatic error handling with Result
 
-    Modular system design
+- Modular system design
 
-    Testable and benchmarked code
+- Testable and benchmarked code
 
-    Comfort debugging real Rust tooling issues (Cargo, benches, modules)
+- Comfort debugging real Rust tooling issues (Cargo, benches, modules)
 
 ---
 
 ## 📌 Future Work
 
-    Build a full AST
+- Build a full AST
 
-    Add symbolic differentiation and simplification
+- Add symbolic differentiation and simplification
 
-    Add constant folding and optimizations
+- Add constant folding and optimizations
 
-    Extend grammar (functions, unary ops)
+- Extend grammar (functions, unary ops)
 
-    Explore JIT or bytecode-style execution
+- Explore JIT or bytecode-style execution
 
 ---
 
